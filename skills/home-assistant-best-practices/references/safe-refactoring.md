@@ -166,8 +166,29 @@ ha_config_set_group("rollogruppe", entities=["cover.neu_1", "cover.neu_2"])
 # Option B: Options-Flow (für Config-Entry-Groups)
 POST /api/config/config_entries/options/flow
 body: {"handler": "<entry_id>"}
-# → neuen Member-IDs übergeben
+# → neue Member-IDs übergeben (Step 2)
+POST /api/config/config_entries/options/flow/<flow_id>
+body: {"entities": ["new.entity_1", "new.entity_2"], "hide_members": false, "all": false}
 ```
+
+**Fallstricke beim Options-Flow für Gruppen:**
+
+| Feld | Erlaubt | Verboten |
+|---|---|---|
+| `entities` | ✅ | |
+| `hide_members` | ✅ | |
+| `all` | ✅ (nur binary_sensor/sensor-Gruppen) | |
+| `group_type` | ❌ → HTTP 400 | extra key not allowed |
+| `name` | ❌ → HTTP 400 | extra key not allowed |
+
+**Schema vorab prüfen:**
+```python
+# Erlaubte Felder live abfragen
+GET /api/config/config_entries/options/flow/<flow_id>
+# → data_schema zeigt exakt welche Felder akzeptiert werden
+```
+
+Cover-Gruppen haben kein `all`-Feld — weglassen. Binary-sensor-Gruppen haben es.
 
 ---
 
