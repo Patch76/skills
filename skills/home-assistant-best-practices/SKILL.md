@@ -9,14 +9,17 @@ description: >
   - Writing or restructuring triggers, conditions, or automation modes
   - Setting up Zigbee button/remote automations (ZHA or Zigbee2MQTT)
   - Renaming entities or migrating device_id references to entity_id
+  - Renaming entities used by integrations with Setup-Flow (Better Thermostat, Generic Thermostat, Min/Max, Threshold)
 
   SYMPTOMS THAT TRIGGER THIS SKILL:
   - Agent uses Jinja2 templates where native conditions, triggers, or helpers exist
   - Agent uses device_id instead of entity_id in triggers/actions
   - Agent modifies entity IDs or config objects without checking all consumers
   - Agent chooses wrong automation mode (e.g., single for motion lights)
+  - Agent renames entities but does not patch core.config_entries data fields
+  - Agent renames entities but does not update Storage-Mode-Dashboard .storage files
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Home Assistant Best Practices
@@ -29,7 +32,7 @@ Follow this sequence when creating any automation:
 
 ### 0. Gate: modifying existing config?
 
-If your change affects entity IDs or cross-component references — renaming entities, replacing template sensors with helpers, converting device triggers, or restructuring automations — read `references/safe-refactoring.md` first. That reference covers impact analysis, device-sibling discovery, and post-change verification. Complete its workflow before proceeding.
+If your change affects entity IDs or cross-component references — renaming entities, replacing template sensors with helpers, converting device triggers, or restructuring automations — read `references/safe-refactoring.md` first. That reference covers impact analysis, device-sibling discovery, config-entry data fields, storage dashboard patching, and post-change verification. Complete its workflow before proceeding.
 
 Steps 1-5 below apply to new config or pattern evaluation.
 
@@ -85,7 +88,9 @@ See `references/device-control.md#zigbee-buttonremote-patterns`.
 | `mode: single` for motion lights | `mode: restart` | Re-triggers must reset the timer | `references/automation-patterns.md#automation-modes` |
 | Template sensor for sum/mean | `min_max` helper | Declarative, handles unavailable states | `references/helper-selection.md#numeric-aggregation` |
 | Template binary sensor with threshold | `threshold` helper | Built-in hysteresis support | `references/helper-selection.md#threshold` |
-| Renaming entity IDs without impact analysis | Follow `references/safe-refactoring.md` workflow | Renames break dashboards, scripts, and scenes silently | `references/safe-refactoring.md#entity-renames` |
+| Renaming entity IDs without impact analysis | Follow `references/safe-refactoring.md` workflow | Renames break dashboards, scripts, scenes, Config-Entry data, and storage dashboards silently | `references/safe-refactoring.md#entity-renames` |
+| Renaming entities used by BT/Generic Thermostat/Min-Max without patching Config-Entry data | Scan and patch `core.config_entries` | Setup-Flow integrations store entity_ids in `data`, not YAML — invisible to ha_rename_entity | `references/safe-refactoring.md#config-entry-data` |
+| Patching Storage-Mode-Dashboards after HA-Neustart | Patch before restart, then restart | HA loads `.storage/lovelace.*` only at startup | `references/safe-refactoring.md#config-entry-data` |
 
 ---
 
@@ -94,8 +99,8 @@ See `references/device-control.md#zigbee-buttonremote-patterns`.
 Read these when you need detailed information:
 
 | File | When to read | Key sections |
-|------|--------------|--------------|
-| `references/safe-refactoring.md` | Renaming entities, replacing helpers, restructuring automations, or any modification to existing config | `#universal-workflow`, `#entity-renames`, `#helper-replacements`, `#trigger-restructuring` |
+|------|--------------|----|
+| `references/safe-refactoring.md` | Renaming entities, replacing helpers, restructuring automations, or any modification to existing config | `#universal-workflow`, `#entity-renames`, `#config-entry-data`, `#helper-replacements`, `#trigger-restructuring` |
 | `references/automation-patterns.md` | Writing triggers, conditions, waits, or choosing automation modes | `#native-conditions`, `#trigger-types`, `#wait-actions`, `#automation-modes`, `#ifthen-vs-choose`, `#trigger-ids` |
 | `references/helper-selection.md` | Deciding whether to use a built-in helper vs template sensor | `#numeric-aggregation`, `#rate-and-change`, `#time-based-tracking`, `#counting-and-timing`, `#scheduling`, `#entity-grouping`, `#decision-matrix` |
 | `references/template-guidelines.md` | Confirming templates ARE appropriate for a use case | `#when-templates-are-appropriate`, `#when-to-avoid-templates`, `#template-sensor-best-practices`, `#common-patterns`, `#error-handling` |
