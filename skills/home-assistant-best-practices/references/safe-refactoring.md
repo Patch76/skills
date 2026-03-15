@@ -95,3 +95,36 @@ When converting `device_id` triggers to `entity_id` triggers, or replacing `wait
 
 **Automation callers (Step 2):**
 Search for scripts or other automations that call the automation you are restructuring via `automation.trigger` or `automation.turn_on`. Renaming or splitting an automation changes its entity_id and breaks these callers.
+
+---
+
+## Config-Entry-Groups
+
+When renaming entities that are members of a HA **group** created via the UI (Config-Entry-based group, platform: `group`):
+
+**`ha_rename_entity` does NOT update group members automatically.**
+
+Group member entity IDs are stored in `options.entities` of the group's Config Entry — not in the entity registry. A registry rename leaves the group referencing the old (now non-existent) entity ID, silently breaking it.
+
+**Detection (Step 2):**
+Check all Config-Entry-based groups for membership:
+
+```bash
+# Via ha_get_integration(domain="group") — inspect options.entities for old entity IDs
+ha_get_integration(domain="group", include_options=True)
+```
+
+**Fix (Step 4):**
+After the registry rename, update group membership via the Options Flow:
+
+```bash
+POST /api/config/config_entries/options/flow
+{"handler": "<group_config_entry_id>"}
+
+# Then PATCH the flow step with new member entity IDs:
+POST /api/config/config_entries/options/flow/<flow_id>
+{"entities": ["new.entity_id_1", "new.entity_id_2"]}
+```
+
+**Verify (Step 5):**
+Re-fetch the group config entry and confirm `options.entities` contains only new entity IDs.
