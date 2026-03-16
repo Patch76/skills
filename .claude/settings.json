@@ -1,5 +1,7 @@
 {
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "skill-creator@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
       "source": {
