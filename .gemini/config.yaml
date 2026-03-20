@@ -11,8 +11,8 @@ code_review:
           err toward over-triggering rather than under-triggering; good descriptions
           include explicit TRIGGER WHEN and SYMPTOMS sections listing observable agent
           behaviors that signal the skill is needed
-        - `metadata.version`: semver (e.g. "1.0.0"); must be bumped in every PR that
-          changes skill content — CI enforces this
+        - `metadata.version`: monotonically incrementing integer managed by CI; new
+          skills set it to `0` as a placeholder — do not edit manually
 
         ## Structure
         - SKILL.md must stay under 500 lines

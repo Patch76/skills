@@ -20,7 +20,7 @@ description: >
   - Agent hard-codes min/max values or picks a raw sensor when a derived helper is more
     appropriate for a dashboard card
 metadata:
-  version: "1.1.0"
+  version: 2
 ---
 
 # Home Assistant Best Practices
