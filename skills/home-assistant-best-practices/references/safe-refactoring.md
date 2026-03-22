@@ -190,28 +190,19 @@ Flow is the only way to read current group members.
 
 **Symptom:** Integration reports "associated entity missing" or behaves incorrectly after restart.
 
-**Timing-critical:** Patch Config-Entry data fields **before the HA restart**. An integration that starts with stale entity_ids can extend restart time significantly.
+**Timing:** Patch Config-Entry data fields **before the HA restart**. An integration that starts with stale entity_ids can cause integration setup failures on restart.
 
-**Scan snippet:**
-```bash
-python3 -c "
-import json
-data = json.load(open('/config/.storage/core.config_entries'))
-old_ids = ['old.entity_id']
-for entry in data['data']['entries']:
-    text = json.dumps(entry.get('data', {})) + json.dumps(entry.get('options', {}))
-    hits = [o for o in old_ids if o in text]
-    if hits:
-        print(entry['domain'], entry['title'], hits)
-"
-```
-
-**Fix via Options Flow (REST):**
+**Scan via REST API:**
 ```http
-POST /api/config/config_entries/options/flow
-{"handler": "<entry_id>"}
+GET /api/config/config_entries/entry
 ```
-Then submit the returned form with updated entity_ids. See the Config-Entry-Groups section above for the full Options Flow pattern.
+Iterate the returned entries and check `data` and `options` fields for the old entity ID.
+
+**Fix:**
+
+For integrations that store entity_ids in `options` (Generic Thermostat, Generic Hygrostat, Threshold Helper, Min/Max Helper): use the Options Flow. See the Config-Entry-Groups section above for the full Options Flow pattern.
+
+For integrations that store entity_ids in `data` (Better Thermostat): the Options Flow only updates `options` — `data` fields written during the initial Config Flow setup have no standard API for post-setup mutation. Edit `data` directly in `.storage/core.config_entries` and restart HA.
 
 ---
 
@@ -226,6 +217,7 @@ Use the Lovelace WebSocket API (`lovelace/config` to read, `lovelace/config/save
 ```
 1. Read dashboard config:
    WebSocket: {"type": "lovelace/config", "url_path": "<dashboard_url_path>"}
+   Note: the default (Overview) dashboard requires `"url_path": null`; custom dashboards use their string path.
    → returns full dashboard config (JSON)
 
 2. Replace entity IDs externally (Python):
@@ -238,10 +230,7 @@ Use the Lovelace WebSocket API (`lovelace/config` to read, `lovelace/config/save
    → takes effect immediately, no restart required
 ```
 
-Some HA integrations use this WebSocket call internally for dashboard saves. Scripting sandboxes that restrict Python imports and method calls are unsuitable for bulk entity-ID replacement — pass the fully replaced config as a plain object instead.
 
-**Fallback — direct file edit (requires restart):**
-Edit `.storage/lovelace.<dashboard_id>` directly and restart HA. For large dashboards, compress the JSON first: `json.dumps(data, separators=(',', ':'))`.
 
 **List all storage dashboards:**
 WebSocket: `{"type": "lovelace/dashboards/list"}` → returns all dashboards with their url_path.
