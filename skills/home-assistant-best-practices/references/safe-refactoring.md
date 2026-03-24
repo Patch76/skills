@@ -173,7 +173,6 @@ for `entities` contains only the updated entity IDs. The REST endpoint
 `GET /api/config/config_entries/entry` does not expose `options.entities` — the Options
 Flow is the only way to read current group members.
 
-
 ## Config-Entry Data — Blind Spots for entity registry renames
 
 **Entity registry renames only update the Entity Registry.** Integrations that collect entity_ids during their setup flow store them in the Config Entry — not in YAML and not in the Entity Registry. A registry rename leaves these references pointing to the old (now non-existent) entity ID.
@@ -236,3 +235,4 @@ Use the Lovelace WebSocket API (`lovelace/config` to read, `lovelace/config/save
 
 **List all storage dashboards:**
 WebSocket: `{"type": "lovelace/dashboards/list"}` → returns all dashboards with their url_path.
+
