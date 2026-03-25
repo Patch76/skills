@@ -198,7 +198,7 @@ GET /api/config/config_entries/entry
 ```
 Iterate the returned entries and check `data` and `options` fields for the old entity ID.
 
-> **Note:** Some custom integrations (including Better Thermostat) do not expose their entity references in `data` or `options` via this endpoint — the fields may appear empty even when the integration is configured. For these integrations, the REST scan will return no matches; see the Fix section below for the applicable fix path (or its absence).
+> **Note:** Some custom integrations (including Better Thermostat) do not expose their entity references in `data` or `options` via this endpoint — the fields may appear empty even when the integration is configured. For these integrations, the REST scan will return no matches; the Fix section below documents whether an alternative fix path exists.
 
 **Fix:**
 
