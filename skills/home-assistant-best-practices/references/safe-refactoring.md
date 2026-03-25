@@ -182,7 +182,7 @@ Flow is the only way to read current group members.
 
 | Integration | Storage field | Fields containing entity_ids |
 |---|---|---|
-| **Better Thermostat** | `data` (not accessible via REST — see note above) | `temperature_sensor`, `humidity_sensor`, `outdoor_sensor`, `window_sensors` |
+| **Better Thermostat** | `data` (not accessible via REST — see note below) | `temperature_sensor`, `humidity_sensor`, `outdoor_sensor`, `window_sensors` |
 | Generic Thermostat | `options` | `heater`, `target_sensor` |
 | Generic Hygrostat | `options` | `humidifier`, `target_sensor` |
 | Threshold Helper | `options` | `entity_id` |
@@ -198,7 +198,7 @@ GET /api/config/config_entries/entry
 ```
 Iterate the returned entries and check `data` and `options` fields for the old entity ID.
 
-> **Note:** Some custom integrations (including Better Thermostat) do not expose their entity references in `data` or `options` via this endpoint — the fields may appear empty even when the integration is configured. For these integrations, the REST scan will return no matches; use the Options Flow (see Fix section below) to inspect and update the configuration instead.
+> **Note:** Some custom integrations (including Better Thermostat) do not expose their entity references in `data` or `options` via this endpoint — the fields may appear empty even when the integration is configured. For these integrations, the REST scan will return no matches; see the Fix section below for the applicable fix path (or its absence).
 
 **Fix:**
 
