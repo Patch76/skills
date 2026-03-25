@@ -106,3 +106,24 @@ Read these when you need detailed information:
 | `references/template-guidelines.md` | Confirming templates ARE appropriate for a use case | `#when-templates-are-appropriate`, `#when-to-avoid-templates`, `#template-sensor-best-practices`, `#common-patterns`, `#error-handling` |
 | `references/device-control.md` | Writing service calls, Zigbee button automations, or using target: | `#entity-id-vs-device-id`, `#service-calls-best-practices`, `#zigbee-buttonremote-patterns`, `#domain-specific-patterns` |
 | `references/examples.yaml` | Need compound examples combining multiple best practices | — |
+
+## HA Helper Storage-Schema: input_number
+
+Beim direkten Schreiben von `.storage/input_number` (z.B. via `write_file`) gelten folgende Schlüssel:
+
+```json
+{
+  "id": "mein_helper",
+  "name": "Anzeigename",
+  "min": 5.0,
+  "max": 30.0,
+  "step": 0.5,
+  "initial": 21.0,
+  "mode": "box",
+  "unit_of_measurement": "°C",
+  "icon": "mdi:thermometer"
+}
+```
+
+⚠️ Schlüssel heißen `min`/`max` — nicht `minimum`/`maximum` (wie in `configuration.yaml` und im Storage-Schema identisch).
+Vor jedem Storage-Schreiben: bestehende Datei als Schema-Referenz lesen, nie aus Erinnerung schreiben.
