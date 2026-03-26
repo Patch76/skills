@@ -82,6 +82,8 @@ Structure: `{ "data": { "entities": [ {...}, ... ] } }`
 To remove stale entries (e.g. after a helper was deleted via UI but
 its zombie persists):
 
+Run via SSH terminal (`core.entity_registry` is ~2–3 MB — too large for `write_file`):
+
 ```python
 import json, shutil
 shutil.copy('/config/.storage/core.entity_registry',
@@ -93,7 +95,7 @@ reg['data']['entities'] = [
     if e.get('unique_id') != 'the_id_to_remove'
 ]
 with open('/config/.storage/core.entity_registry', 'w') as f:
-    json.dump(reg, f)
+    json.dump(reg, f, ensure_ascii=False)
 ```
 
 **After writing:** restart HA (reload is not sufficient for registry changes).
