@@ -639,7 +639,7 @@ Disabling an automation via *Settings → Automations → ⋮ → Show settings 
 | Survives restart? | Yes |
 | Entity in state machine? | **No** — `GET /api/states/<entity_id>` returns 404 |
 | Requires `id:` field? | Yes — only automations with a `unique_id` have a registry entry |
-| Re-enable via | UI only (Settings → Automations → Enabled toggle) |
+| Re-enable via | UI toggle (Settings → Automations → Enabled) or `homeassistant.enable_entity` service |
 
 **Note:** The list toggle on the Automations page (`/config/automation/dashboard`) controls Method 1 (trigger state). The *Settings* panel toggle controls Method 2 (entity registry). These are independent.
 
@@ -660,7 +660,3 @@ action: automation.turn_off
 target:
   entity_id: automation.my_automation
 ```
-
-### AVOID: `enabled: false` on Action Steps (Blueprint instances)
-
-`enabled: false` on action steps inside Blueprint **instances** causes a startup error. Use `if:`/`condition:` in the Blueprint definition instead, or disable the entire automation via the entity registry.
