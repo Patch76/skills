@@ -9,7 +9,7 @@ This repository provides an Agent Skill for Home Assistant, following the open [
 
 ## Included Skill
 
-**[home-assistant-best-practices](skills/home-assistant-best-practices/):** Native HA constructs over templates, helper selection, automation modes, Zigbee button patterns, device control best practices, and safe refactoring.
+**[home-assistant-best-practices](skills/home-assistant-best-practices/):** Native HA constructs over templates, helper selection, automation modes, Zigbee button patterns, device control best practices, dashboard configuration, and safe refactoring.
 
 ## Installation
 
