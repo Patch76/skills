@@ -28,6 +28,7 @@ Search every component type that references entity IDs. Do not limit searches to
 | Scripts | grep `scripts.yaml` |
 | Scenes | grep `scenes.yaml` |
 | Config-Entry-based groups | `GET /api/config/config_entries/entry?type=config&domain=group` — members in `options.entities`; entity registry renames do NOT update these automatically (→ see Config-Entry-Groups section) |
+| Config-Entry integrations (Better Thermostat, Generic Thermostat, Generic Hygrostat, Threshold Helper, Min/Max Helper) | `GET /api/config/config_entries/entry` — scan `data` and `options` fields for the old entity ID; entity registry renames do NOT update these fields automatically (→ see Config-Entry-Data section) |
 | Other | Check AppDaemon apps, Node-RED flows, Pyscript scripts, or any custom integration that references entity IDs |
 
 Record every location found. This list becomes your update checklist for Step 4.
@@ -223,13 +224,19 @@ Use the Lovelace WebSocket API (`lovelace/config` to read, `lovelace/config/save
    Note: the default (Overview) dashboard requires `"url_path": null`; custom dashboards use their string path.
    → returns full dashboard config (JSON)
 
-2. Replace entity IDs externally (Python):
-   config_str = json.dumps(config)
-   config_str = config_str.replace('"old.entity_id"', '"new.entity_id"')
-   new_config = json.loads(config_str)
+2. Replace entity IDs (Python — JSON-aware, boundary-safe):
+   def _replace_ids(obj, old_id, new_id):
+       if isinstance(obj, str): return new_id if obj == old_id else obj
+       if isinstance(obj, list): return [_replace_ids(i, old_id, new_id) for i in obj]
+       if isinstance(obj, dict): return {(new_id if k == old_id else k): _replace_ids(v, old_id, new_id) for k, v in obj.items()}
+       return obj
+   new_config = _replace_ids(config, "old.entity_id", "new.entity_id")
+   # Note: string replace on json.dumps() is not boundary-safe — it matches entity IDs
+   # that appear as JSON keys or as substrings of other strings in the serialized output.
 
 3. Write dashboard config:
    WebSocket: {"type": "lovelace/config/save", "url_path": "<dashboard_url_path>", "config": new_config}
+   Note: use `"url_path": null` for the default (Overview) dashboard; use the string path for custom dashboards.
    → takes effect immediately, no restart required
 ```
 
