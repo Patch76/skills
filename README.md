@@ -9,7 +9,7 @@ This repository provides an Agent Skill for Home Assistant, following the open [
 
 ## Included Skill
 
-**[home-assistant-best-practices](skills/home-assistant-best-practices/):** Native HA constructs over templates, helper selection, automation modes, Zigbee button patterns, device control best practices, and safe refactoring.
+**[home-assistant-best-practices](skills/home-assistant-best-practices/):** Native HA constructs over templates, helper selection, automation modes, Zigbee button patterns, device control best practices, dashboard configuration, and safe refactoring.
 
 ## Installation
 
@@ -34,7 +34,7 @@ Run each command separately inside Claude Code:
 /plugin install home-assistant-skills@homeassistant-ai-skills
 ```
 
-Restart Claude Code after installation for the skill to take effect.
+Run `/reload-plugins` or restart Claude Code for the skill to take effect.
 
 ### Claude Desktop / claude.ai
 
@@ -54,6 +54,9 @@ The `home-assistant-best-practices` skill includes:
 | `references/helper-selection.md` | Built-in helpers vs template sensors (with decision matrix) |
 | `references/template-guidelines.md` | When templates are the right choice |
 | `references/device-control.md` | Service calls, entity_id vs device_id, Zigbee buttons |
+| `references/dashboard-guide.md` | Dashboard layout, view types, sections, custom cards, CSS styling |
+| `references/dashboard-cards.md` | Card type lookup and card-specific documentation |
+| `references/domain-docs.md` | Integration and domain documentation for service calls, entity attributes |
 | `references/examples.yaml` | Compound examples combining multiple best practices |
 
 ## Contributing
