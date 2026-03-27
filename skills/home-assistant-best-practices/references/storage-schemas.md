@@ -35,7 +35,7 @@ that agents may need to read or write directly via the HA file API or SSH.
 }
 ```
 
-**Key notes:** Keys are `min` / `max` (not `minimum` / `maximum`), same as in `configuration.yaml`. `initial`, `unit_of_measurement`, and `icon` are optional. `mode`: `"box"` or `"slider"`. `id` must match the `unique_id` in `core.entity_registry`.
+**Key notes:** Keys are `min` / `max` (not `minimum` / `maximum`), same as in `configuration.yaml`. `initial`, `unit_of_measurement`, and `icon` are optional. `mode`: `"box"` or `"slider"`. The `id` value (e.g. `my_helper`) forms the `unique_id` in `core.entity_registry` as `input_number.<id>` (e.g. `input_number.my_helper`).
 
 **After writing:** call `input_number/reload` or restart HA.
 
@@ -62,7 +62,7 @@ that agents may need to read or write directly via the HA file API or SSH.
 }
 ```
 
-**Key notes:** No `initial` field — state is not persisted here. `icon` is optional.
+**Key notes:** No `initial` field — the on/off state is persisted by HA separately (in `core.restore_state`), not in this storage file. `icon` is optional.
 
 ---
 
