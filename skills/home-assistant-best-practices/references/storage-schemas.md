@@ -64,6 +64,8 @@ that agents may need to read or write directly.
 
 **Key notes:** No `initial` field (state is not stored here), `icon` is optional.
 
+**After writing:** call the `input_boolean.reload` service, or restart HA.
+
 ---
 
 ## entity_registry (cleanup)
