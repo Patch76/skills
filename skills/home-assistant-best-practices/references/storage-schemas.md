@@ -72,7 +72,7 @@ that agents may need to read or write directly.
 
 Structure: `{ "data": { "entities": [ {...}, ... ] } }`
 
-> ⚠️ ~2–3 MB — too large for the HA REST file API; use SSH, terminal, or file manager add-on.
+> ⚠️ ~2–3 MB — too large for the HA REST file API, use SSH, terminal, or file manager add-on.
 
 To remove stale entries:
 
