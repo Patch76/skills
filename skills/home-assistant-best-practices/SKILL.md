@@ -121,3 +121,4 @@ Read these when you need detailed information:
 | `references/dashboard-cards.md` | Looking up available card types or fetching card-specific documentation | — |
 | `references/domain-docs.md` | Looking up integration or domain documentation for service calls, entity attributes, or configuration | — |
 | `references/examples.yaml` | Need compound examples combining multiple best practices | — |
+| `references/storage-schemas.md` | Writing directly to `.storage/` files — key names, required fields, reload vs restart | `#input-number`, `#input-boolean`, `#entity-registry` |
