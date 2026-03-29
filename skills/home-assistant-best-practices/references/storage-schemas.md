@@ -35,9 +35,9 @@ that agents may need to read or write directly.
 }
 ```
 
-**Key notes:** Keys are `min` / `max` (not `minimum` / `maximum` as in YAML config). `initial`, `unit_of_measurement`, and `icon` are optional. `mode`: `"box"` or `"slider"`. The `id` value (e.g. `my_helper`) forms the `unique_id` in `core.entity_registry` as `input_number.<id>` (e.g. `input_number.my_helper`).
+**Key notes:** Keys are `min` / `max` (not `minimum` / `maximum` as in YAML config). `initial`, `unit_of_measurement`, and `icon` are optional. `mode`: `"box"` or `"slider"`. The `id` value (e.g. `my_helper`) becomes the `unique_id` in `core.entity_registry` directly (e.g. `my_helper`); the `entity_id` is `input_number.<id>` (e.g. `input_number.my_helper`).
 
-**After writing:** call `input_number/reload` or restart HA.
+**After writing:** call the `input_number.reload` service (Reloading → Input Numbers in Developer Tools), or restart HA.
 
 ---
 
@@ -62,7 +62,7 @@ that agents may need to read or write directly.
 }
 ```
 
-**Key notes:** No `initial` field — the on/off state is persisted by HA separately (in `core.restore_state`), not in this storage file. `icon` is optional.
+**Key notes:** No `initial` field — the on/off state is not stored here; only the helper's name and icon are defined in this file. `icon` is optional.
 
 ---
 
@@ -72,17 +72,10 @@ that agents may need to read or write directly.
 
 Structure: `{ "data": { "entities": [ {...}, ... ] } }`
 
-To remove stale entries (e.g. after a helper was deleted via the UI but
-its zombie entry persists in the registry):
+To remove stale entries (e.g. after a helper was removed without proper cleanup and its entry persists in the registry):
 
 > ⚠️ `core.entity_registry` is ~2–3 MB — too large for the HA REST file API.
 > Use a method that supports large file reads and writes (e.g. SSH, terminal access,
 > or a file manager add-on).
 
-Steps:
-1. Back up `core.entity_registry` before editing.
-2. Read the file and parse the JSON structure.
-3. Remove the entry where `unique_id` matches the stale entity
-   (e.g. `input_number.my_helper` → `unique_id: "my_helper"`).
-4. Write the modified JSON back to the file.
-5. Restart Home Assistant — a reload is not sufficient for registry changes.
+Steps: back up the file, read and parse the JSON structure, remove the entry where `unique_id` matches the stale entity (e.g. `input_number.my_helper` → `unique_id: "my_helper"`), write the modified JSON back, and restart HA (a reload is not sufficient for registry changes).
