@@ -35,7 +35,7 @@ that agents may need to read or write directly.
 }
 ```
 
-**Key notes:** Keys are `min` / `max` (not `minimum` / `maximum` as in YAML config). `initial`, `unit_of_measurement`, and `icon` are optional. `mode`: `"box"` or `"slider"`. The `id` value (e.g. `my_helper`) becomes the `unique_id` in `core.entity_registry` directly (e.g. `my_helper`); the `entity_id` is `input_number.<id>` (e.g. `input_number.my_helper`).
+**Key notes:** Keys are `min`/`max` (not `minimum`/`maximum` as in YAML config), `initial`, `unit_of_measurement`, and `icon` are optional, `mode` is `"box"` or `"slider"`, the `id` value (e.g. `my_helper`) becomes the `unique_id` in `core.entity_registry` and the `entity_id` is `input_number.<id>` (e.g. `input_number.my_helper`).
 
 **After writing:** call the `input_number.reload` service (Reloading → Input Numbers in Developer Tools), or restart HA.
 
@@ -62,7 +62,7 @@ that agents may need to read or write directly.
 }
 ```
 
-**Key notes:** No `initial` field — the on/off state is not stored here; only the helper's name and icon are defined in this file. `icon` is optional.
+**Key notes:** No `initial` field (state is not stored here), `icon` is optional. `icon` is optional.
 
 ---
 
