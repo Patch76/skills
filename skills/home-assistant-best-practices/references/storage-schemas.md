@@ -62,7 +62,7 @@ that agents may need to read or write directly.
 }
 ```
 
-**Key notes:** initial field absent (state not stored), icon optional.
+**Key notes:** initial field absent (state not stored), icon optional, id becomes unique_id in core.entity_registry, entity_id is input_boolean.<id>.
 
 **After writing:** call input_boolean.reload or restart HA.
 
